@@ -1,393 +1,480 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>First Light – Single Product Page</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <meta charset="utf-8">
+  <title>First Light</title>
+  <meta name="description" content="First Lights are stars that nobody has ever looked at before...">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap" rel="stylesheet">
 
   <style>
-    /* Basic Reset & Body */
+    /* RESET & BASE STYLES */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     html, body {
-      margin: 0; 
-      padding: 0; 
-      width: 100%; 
       height: 100%;
-      background: black;
-      font-family: 'Libre Caslon Display', serif;
-      color: white;
     }
     body {
-      /* We’ll use a stacking context so the starfield is behind all content */
-      overflow-x: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000000;
+      color: #ffffff;
+      line-height: 1.5;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 
-    /* The Canvas or WebGL Renderer from Three.js sits behind other content */
-    #starfield-container {
-      position: fixed; /* so it stays put while scrolling */
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1; 
+    h1, h2, h3, .product__title p {
+      font-family: 'Libre Caslon Display', serif;
     }
 
-    /* Main page content wrapper */
-    .content-wrapper {
-      position: relative; /* so it appears above the starfield */
-      z-index: 5;
-      width: 100%;
-      max-width: 900px;
+    h1 {
+        font-size: 3rem;
+    }
+    img {
+        border-radius: 1rem;
+    }
+
+    /* PAGE‑WIDTH CONTAINER + SECTION */
+    .page-width {
+      width: 80vw;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem 1rem 5rem;
-      box-sizing: border-box;
+    }
+    .section {
+      padding: 2rem 0;
     }
 
-    /* Top header text */
-    .page-header {
-      text-align: center;
-      margin-bottom: 3rem;
+    /* PRODUCT LAYOUT: 2 columns on desktop, 1 column on mobile */
+    .product {
+      display: grid;
+      gap: 2rem;
     }
-    .page-header h1 {
-      font-size: 2.5em;
-      margin: 0 0 0.5rem 0;
-    }
-    .page-header .subtitle {
-      font-size: 1.3em;
-      opacity: 0.8;
-      line-height: 1.4em;
+    @media (min-width: 750px) {
+      .product {
+        grid-template-columns: 1fr 1fr; /* images on the left, info on the right */
+      }
     }
 
-    /* Product section */
-    #product-section {
-      background: rgba(0, 0, 0, 0.7);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 8px;
-      padding: 2rem;
-    }
-    #product-section h2 {
-      margin-top: 0;
-      text-transform: uppercase;
-      font-size: 2em;
-      margin-bottom: 1rem;
-      text-align: center;
+    /* IMAGES LIST (stacked by default; carousel on mobile) */
+    .product__media-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
 
-    /* Carousel Styles */
-    .carousel-container {
-      position: relative;
-      overflow: hidden;
+    /* Each image "slide" container. */
+    .slider__slide img {
       width: 100%;
-      margin: 0 auto 1rem auto;
-      height: 300px;
-      max-height: 60vw; /* for responsiveness on smaller screens */
+      height: auto;
+      display: block;
     }
-    .carousel-images {
-      display: flex;
-      transition: transform 0.5s ease;
-      width: 100%;
-      height: 100%;
-    }
-    .carousel-images img {
-      max-height: 100%;
-      /* width: 100%; */
-      flex-shrink: 0;
-      /* object-fit: cover;s */
-    }
-    .carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,0.7);
-      border: none;
-      padding: 8px 12px;
-      cursor: pointer;
-      color: black;
-      font-size: 1rem;
-    }
-    #prev-btn { left: 10px; }
-    #next-btn { right: 10px; }
 
-    /* Descriptions, Price, FAQ */
-    .short-description,
-    .long-description {
-      margin-bottom: 1rem;
-      line-height: 1.4em;
+    /* MOBILE‑ONLY CAROUSEL: default = stacked. Overridden by a media query. */
+    .slider__track {
+      /* By default (desktop), just stack them with block flow */
+      display: block;
     }
-    .price {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-bottom: 2rem;
+    .slider__slide {
+      margin-bottom: 1.5rem; /* spacing between images */
     }
-    .faq-section h3 {
+    /* Hide carousel controls on desktop */
+    .slider-buttons,
+    .slider-counter {
+      display: none;
+    }
+
+    /* On mobile (< 750px), turn it into a horizontal slider */
+    @media (max-width: 749px) {
+      .product__media-wrapper {
+        position: relative;
+        overflow: hidden;
+        max-width: 100%;
+      }
+      .slider__track {
+        display: flex;
+        transition: transform 0.4s ease;
+        width: 100%;
+      }
+      .slider__slide {
+        flex: 0 0 100%;
+        margin-bottom: 0;
+        width: 100%;
+      }
+      .slider__slide img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+      .slider-buttons {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: space-between;
+        padding: 0 1rem;
+        pointer-events: none;
+      }
+      .slider-counter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+      }
+      .slider-buttons button {
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: auto;
+        transition: background-color 0.3s ease;
+      }
+      .slider-buttons button::before {
+        content: '';
+        display: block;
+        width: 0.8rem;
+        height: 0.8rem;
+        border: 2px solid white;
+        border-left: 0;
+        border-bottom: 0;
+      }
+      .slider-btn-prev::before {
+        transform: rotate(-135deg);
+        margin-left: 0.3rem;
+      }
+      .slider-btn-next::before {
+        transform: rotate(45deg);
+        margin-right: 0.3rem;
+      }
+      .slider-buttons button:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
+    }
+
+    /* PRODUCT INFO */
+    .product__title h1 {
+      margin: 0.5rem 0;
+    }
+    .product__description {
       margin-top: 1.5rem;
-      margin-bottom: 0.5rem;
     }
-    .faq-item {
-      margin-bottom: 1rem;
+
+    /* FAQ ACCORDION */
+    .accordion details {
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .accordion summary {
+      cursor: pointer;
+      list-style: none;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+    .accordion summary::-webkit-details-marker {
+      display: none;
+    }
+    .accordion__content {
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #000000;
+      padding: 1rem 0;
+    }
+    .footer__copyright {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #ffffff;
+    }
+    .footer__copyright a {
+      color: #ffffff;
+      text-decoration: underline;
     }
   </style>
 </head>
+
 <body>
+  <main>
+    <!-- PRODUCT SECTION -->
+    <section class="section page-width">
+      <div class="product">
+        <!-- LEFT COLUMN: IMAGES -->
+        <div class="product__media-wrapper">
+          <!-- The UL with "slider__track" for mobile -->
+          <ul class="product__media-list slider__track">
+            <li class="slider__slide">
+              <img 
+                src="./assets/hand_image.png"
+                alt="First Light image 1"
+              >
+            </li>
+            <li class="slider__slide">
+              <img
+                src="./assets/two_page_image.png"
+                alt="First Light image 2"
+              >
+            </li>
+            <li class="slider__slide">
+              <img
+                src="./assets/frame_image.png"
+                alt="First Light image 3"
+              >
+            </li>
+            <li class="slider__slide">
+              <img
+                src="./assets/star_image.png"
+                alt="First Light image 4"
+              >
+            </li>
+          </ul>
 
-  <!-- STARFIELD BACKGROUND CONTAINER -->
-  <div id="starfield-container"></div>
+          <!-- Carousel controls (only visible on mobile via CSS) -->
+          <div class="slider-buttons">
+            <button type="button" class="slider-btn-prev" aria-label="Previous"></button>
+            <button type="button" class="slider-btn-next" aria-label="Next"></button>
+          </div>
+          <div class="slider-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">4</span>
+          </div>
+        </div>
 
-  <!-- MAIN CONTENT WRAPPER -->
-  <div class="content-wrapper">
+        <!-- RIGHT COLUMN: PRODUCT DETAILS -->
+        <div class="product__info-wrapper">
+          <div class="product__title">
+            <h1>First Light</h1>
+          </div>
+          <p><strong>$30.00 USD + Shipping</strong></p>
+          <div id='product-component-1740366896033'></div>
+            <script type="text/javascript">
+            /*<![CDATA[*/
+            (function () {
+              var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+              if (window.ShopifyBuy) {
+                if (window.ShopifyBuy.UI) {
+                  ShopifyBuyInit();
+                } else {
+                  loadScript();
+                }
+              } else {
+                loadScript();
+              }
+              function loadScript() {
+                var script = document.createElement('script');
+                script.async = true;
+                script.src = scriptURL;
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+                script.onload = ShopifyBuyInit;
+              }
+              function ShopifyBuyInit() {
+                var client = ShopifyBuy.buildClient({
+                  domain: '5imcje-sc.myshopify.com',
+                  storefrontAccessToken: '77e02658461cb1e3fa86413604b7ddf3',
+                });
+                ShopifyBuy.UI.onReady(client).then(function (ui) {
+                  ui.createComponent('product', {
+                    id: '7485513990249',
+                    node: document.getElementById('product-component-1740366896033'),
+                    moneyFormat: '%24%7B%7Bamount%7D%7D',
+                    options: {
+                      "product": {
+                        "styles": {
+                          "product": {
+                            "img": {
+                              "display": "none"
+                            },
+                            "@media (min-width: 601px)": {
+                              "max-width": "100%",
+                              "margin-left": "0",
+                              "margin-bottom": "20px"
+                            }
+                          },
+                          "title": {
+                            "display": "none"
+                          },
+                          "price": {
+                            "display": "none"
+                          },
+                          "description": {
+                            "display": "none"
+                          },
+                          "button": {
+                            "display": "block !important", 
+                            "font-family": "'Libre Caslon Display', serif",
+                            "font-size": "1.2em",
+                            "padding": "15px 30px",
+                            "color": "#000000",
+                            "width": "100%",    
+                            ":hover": {
+                              "color": "#ffffff",
+                              "background-color": "#808080"
+                            },
+                            "background-color": "#ffffff",
+                            ":focus": {
+                              "background-color": "#808080"
+                            },
+                            "border-radius": "0"
+                          }
+                        }
+                      }
+                    }
+                  });
+                });
+              }
+            })();
+            /*]]>*/
+            </script>
+          <div class="product__description">
+            First Lights are stars that nobody has ever looked at before. Through a process done in collaboration with research astronomers around the world, the excess and unimportant stars of astronomy are collected, printed, folded, and sealed completely blindly, so that when you open up a First Light, you become the first person in the world to see it. 
+            <br/>
+            <br/>
+            --
+            <br/>
+            <br/>
+            Modern astronomy uses computerized telescopes to discover tens of millions of new stars every year, which is thousands and thousands of new stars of every day. The only people who care about these newly discovered worlds however - research astronomers - could not care less what they look like. Once you've seen the 2+ billion of them that humanity has discovered (itself an impossible task), you've pretty much seen them all. Instead, these new neighbors we find around our galaxy are much more useful for their data: measurements like brightness, wavelength, flicker, and motion that can be plugged in en masse to scientific models so that these individually irrelevant stars can - in the aggregate - uncover new secrets of the universe. That's all they're good for. 
+            <br/>
+            <br/>
+            The story of modern starlight is one where photons originate trillions and trillions of miles away, spend millions and millions of years getting here, and become destined to spend their life as a row of numbers in a database rather than as a glimmer in a human eye.
+            <br/>
+            <br/>
+            I find that deeply sad. But it doesn't have to be. 
+            <br/>
+            <br/>
+            If you think about what data get collected: brightness, wavelength, flicker — those are all visual pieces of information. Information that we get from the *pictures we take* of these things. Pictures of stars that we have discovered, named, and catalogued by the billion that nobody has ever actually *looked at*.
+            <br/>
+            <br/>
+            First Lights give those stars a chance to be seen, by you, for the first time. 
+            <br/>
+            <br/>
+            I scrape, print, and seal these stars all without looking at them through a process done in close consultation with research astronomers across the globe to ensure that these stars are as unimportant and ignored as possible. The individual star in every First Light envelope is unique and never put in another envelope again. You do not own it. You cannot name it. You are merely the first to bear witness, and with your observation - a la Schrödinger - fasten it as really out there amongst the cosmos. 
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <!-- Header / Tagline -->
-    <div class="page-header">
-      <h1>Most stars that we discover are never actually seen.</h1>
-      <div class="subtitle">
-        First Light lets you change that.
+    <!-- FAQ SECTION -->
+    <section class="section page-width">
+      <h2 style="text-align:center;">Frequently Asked Questions</h2>
+      <div class="accordion" style="margin-top:1.5rem;">
+        <details>
+          <summary>
+            <span style="margin-right:0.5rem;">❓</span>
+            <h3 style="display:inline;">How do you know that nobody has seen this star before?</h3>
+          </summary>
+          <div class="accordion__content">
+            <p>In consultation with academic research astronomers across the globe, we've developed a thorough process...</p>
+          </div>
+        </details>
+        <details>
+          <summary>
+            <span style="margin-right:0.5rem;">❓</span>
+            <h3 style="display:inline;">Will I own this star? Can I name it?</h3>
+          </summary>
+          <div class="accordion__content">
+            <p>No, and companies or sites that claim otherwise are scamming you. What's important about your relationship to this star is not ownership...</p>
+          </div>
+        </details>
+        <details>
+          <summary>
+            <span style="margin-right:0.5rem;">❓</span>
+            <h3 style="display:inline;">Can I see this star? How can I learn more about it?</h3>
+          </summary>
+          <div class="accordion__content">
+            <p>The star is too far out in space to see yourself, but each First Light info sheet comes with a map of where it is in the sky among visible constellations...</p>
+          </div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="page-width">
+      <div class="footer__copyright">
+        <small>
+          &copy; 2025, <a href="#">First Light</a>
+        </small>
       </div>
     </div>
+  </footer>
 
-    <!-- PRODUCT SECTION -->
-    <div id="product-section">
-      <h2>First Light</h2>
-
-      <!-- Carousel -->
-      <div class="carousel-container">
-        <div class="carousel-images" id="carouselImages">
-          <!-- Replace these with your own images -->
-          <img src="assets/hand_and_star_2.png" alt="Product Image 1" />
-          <img src="assets/frame_image.png" alt="Product Image 2" />
-          <img src="assets/star_image.png" alt="Product Image 3" />
-        </div>
-        <button class="carousel-btn" id="prev-btn">&#10094;</button>
-        <button class="carousel-btn" id="next-btn">&#10095;</button>
-      </div>
-
-      <!-- Short Description -->
-      <div class="short-description">
-        A peek into the universe like never before: your personal window to the star you name.
-      </div>
-
-      <!-- Long Description -->
-      <div class="long-description">
-        <p>
-          <strong>First Light</strong> is more than just a gift—it's an experience. 
-          We let you pick a real, newly discovered star and then give you an actual visual representation of it. 
-          Our advanced telescopic imagery and star cataloging system ensure that the star you name is truly unique.
-        </p>
-        <p>
-          Inside the package, you'll find historical facts, cosmic data, and a beautifully rendered image 
-          captured by our partnership with leading observatories. Every star tells a story—this time, it's yours.
-        </p>
-      </div>
-
-      <!-- Pricing -->
-      <div class="price">
-        $49.99
-      </div>
-
-      <!-- Shopify Buy Button Placeholder -->
-      <div id="shopify-buy-button">
-        <!-- PLACE YOUR SHOPIFY BUY BUTTON CODE HERE -->
-      </div>
-
-      <!-- FAQ -->
-      <div class="faq-section">
-        <h3>Frequently Asked Questions</h3>
-
-        <div class="faq-item">
-          <strong>How do I know my star is truly unique?</strong>
-          <p>
-            We work with recognized celestial databases to ensure that 
-            when you adopt a star, it’s newly discovered and exclusively yours to name.
-          </p>
-        </div>
-
-        <div class="faq-item">
-          <strong>Do I need special equipment to see it?</strong>
-          <p>
-            No. We provide a high-resolution image. However, you can use 
-            any telescope and our coordinate guide to locate it in the sky if you like.
-          </p>
-        </div>
-
-        <div class="faq-item">
-          <strong>Is this officially recognized by scientists?</strong>
-          <p>
-            We partner with observatories and keep star coordinates in 
-            a publicly accessible database, but naming rights here are a commemorative gesture, 
-            not an official IAU designation.
-          </p>
-        </div>
-      </div>
-    </div> <!-- /#product-section -->
-  </div> <!-- /.content-wrapper -->
-
-  <!-- THREE.JS STARFIELD SCRIPT -->
+  <!-- Simple Mobile Carousel JS -->
   <script>
-    let scene, camera, renderer, starField, centralStar, redSquare;
-    const starCount = 600;
-    let textureLoader = new THREE.TextureLoader();
-    let angle = 450;
-    let twinkleFactor = 0;
+    function initCarousel() {
+      const track = document.querySelector('.slider__track');
+      const slides = Array.from(track.children);
+      const prevButton = document.querySelector('.slider-btn-prev');
+      const nextButton = document.querySelector('.slider-btn-next');
+      const currentEl = document.getElementById('currentSlide');
+      const totalEl = document.getElementById('totalSlides');
 
-    function init() {
-      // Create Scene and Camera
-      scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
-      camera.position.set(300, 0, 0);
+      let currentIndex = 0;
+      totalEl.textContent = slides.length;
 
-      // Renderer
-      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.getElementById('starfield-container').appendChild(renderer.domElement);
-
-      // Star Texture
-      const starTexture = textureLoader.load(
-        "https://raw.githubusercontent.com/james2doyle/threejs-stars/refs/heads/master/images/particle2.png"
-      );
-
-      // Starfield Geometry and Material
-      let geometry = new THREE.BufferGeometry();
-      let positions = new Float32Array(starCount * 3);
-      let colors = new Float32Array(starCount * 3);
-
-      for (let i = 0; i < starCount; i++) {
-        let x = (Math.random() - 0.5) * 1000;
-        let y = (Math.random() - 0.5) * 1000;
-        let z = (Math.random() - 0.5) * 1000;
-        positions[i * 3] = x;
-        positions[i * 3 + 1] = y;
-        positions[i * 3 + 2] = z;
-
-        let colorType = Math.random();
-        if (colorType < 0.05) {
-          // bluish star
-          colors[i * 3]     = 0.3 + Math.random() * 0.2;
-          colors[i * 3 + 1] = 0.3 + Math.random() * 0.2;
-          colors[i * 3 + 2] = 0.8 + Math.random() * 0.2;
-        } else if (colorType < 0.8) {
-          // white star
-          colors[i * 3]     = 1.0 - Math.random() / 5;
-          colors[i * 3 + 1] = 1.0 - Math.random() / 5;
-          colors[i * 3 + 2] = 1.0 - Math.random() / 5;
-        } else {
-          // red/orange star
-          colors[i * 3]     = 0.9 + Math.random() * 0.1;
-          colors[i * 3 + 1] = 0.6 + Math.random() * 0.2;
-          colors[i * 3 + 2] = 0.4 + Math.random() * 0.2;
-        }
+      function updateSlide(index) {
+        currentIndex = index;
+        if (currentIndex < 0) currentIndex = slides.length - 1;
+        if (currentIndex >= slides.length) currentIndex = 0;
+        
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        currentEl.textContent = currentIndex + 1;
       }
 
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      function isMobileWidth() {
+        return window.innerWidth < 750;
+      }
 
-      let material = new THREE.PointsMaterial({
-        size: 8,
-        vertexColors: true,
-        map: starTexture,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        transparent: true
+      prevButton.addEventListener('click', () => {
+        if (!isMobileWidth()) return;
+        updateSlide(currentIndex - 1);
       });
 
-      // Add Starfield
-      starField = new THREE.Points(geometry, material);
-      scene.add(starField);
-
-      // Central Star Sprite
-      let centralStarMaterial = new THREE.SpriteMaterial({ 
-        map: starTexture, 
-        color: 0xffffff,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        alphaTest: 0.1  
+      nextButton.addEventListener('click', () => {
+        if (!isMobileWidth()) return;
+        updateSlide(currentIndex + 1);
       });
-      centralStar = new THREE.Sprite(centralStarMaterial);
-      centralStar.scale.set(20, 20, 1);
-      scene.add(centralStar);
 
-      // Red Square around the central star
-      let squareSize = (window.innerHeight * 0.05) / 2;
-      let squareGeometry = new THREE.BufferGeometry();
-      let squareVertices = new Float32Array([
-        -squareSize,  squareSize, 0,
-         squareSize,  squareSize, 0,
-         squareSize, -squareSize, 0,
-        -squareSize, -squareSize, 0,
-        -squareSize,  squareSize, 0
-      ]);
-      squareGeometry.setAttribute('position', new THREE.BufferAttribute(squareVertices, 3));
-      let squareMaterial = new THREE.LineBasicMaterial({
-        color: 0xff0000, 
-        transparent: true, 
-        opacity: 0.8
+      // Reset on window resize
+      window.addEventListener('resize', () => {
+        if (!isMobileWidth()) {
+          track.style.transform = 'none';
+        } else {
+          updateSlide(currentIndex);
+        }
       });
-      redSquare = new THREE.Line(squareGeometry, squareMaterial);
-      scene.add(redSquare);
 
-      animate();
+      // Initialize immediately if mobile
+      if (isMobileWidth()) {
+        updateSlide(0);
+      }
     }
 
-    function animate() {
-      requestAnimationFrame(animate);
-      angle += 0.001;
-      let radius = 300;
-      camera.position.x = radius * Math.cos(angle);
-      camera.position.z = radius * Math.sin(angle);
-      camera.lookAt(0, 0, 0);
-
-      // Twinkle factor
-      twinkleFactor = 1 + Math.sin(Date.now() * 0.005) * 0.1;
-      centralStar.scale.set(20 * twinkleFactor, 20 * twinkleFactor, 1);
-      centralStar.material.opacity = twinkleFactor;
-
-      redSquare.position.set(0, 0, 0);
-
-      renderer.render(scene, camera);
+    // Run on page load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCarousel);
+    } else {
+      initCarousel();
     }
-
-    // Handle window resizing
-    window.addEventListener('resize', () => {
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-
-      let squareSize = (window.innerHeight * 0.05) / 2;
-      let squareVertices = new Float32Array([
-        -squareSize,  squareSize, 0,
-         squareSize,  squareSize, 0,
-         squareSize, -squareSize, 0,
-        -squareSize, -squareSize, 0,
-        -squareSize,  squareSize, 0
-      ]);
-      redSquare.geometry.setAttribute('position', new THREE.BufferAttribute(squareVertices, 3));
-    });
-
-    init();
   </script>
-
-  <!-- SIMPLE CAROUSEL SCRIPT -->
-  <script>
-    const carouselImages = document.getElementById('carouselImages');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    let currentSlide = 0;
-
-    const slides = carouselImages.querySelectorAll('img');
-    function updateCarousel() {
-      carouselImages.style.transform = `translateX(-${currentSlide * 100}%)`;
-    }
-    function showNextSlide() {
-      currentSlide = (currentSlide + 1) % slides.length;
-      updateCarousel();
-    }
-    function showPrevSlide() {
-      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-      updateCarousel();
-    }
-
-    nextBtn.addEventListener('click', showNextSlide);
-    prevBtn.addEventListener('click', showPrevSlide);
-  </script>
-
 </body>
 </html>
