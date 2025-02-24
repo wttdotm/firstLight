@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>First Light – Single Product Page</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap" rel="stylesheet">
+
+  <style>
+    /* Basic Reset & Body */
+    html, body {
+      margin: 0; 
+      padding: 0; 
+      width: 100%; 
+      height: 100%;
+      background: black;
+      font-family: 'Libre Caslon Display', serif;
+      color: white;
+    }
+    body {
+      /* We’ll use a stacking context so the starfield is behind all content */
+      overflow-x: hidden;
+    }
+
+    /* The Canvas or WebGL Renderer from Three.js sits behind other content */
+    #starfield-container {
+      position: fixed; /* so it stays put while scrolling */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1; 
+    }
+
+    /* Main page content wrapper */
+    .content-wrapper {
+      position: relative; /* so it appears above the starfield */
+      z-index: 5;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem 5rem;
+      box-sizing: border-box;
+    }
+
+    /* Top header text */
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .page-header h1 {
+      font-size: 2.5em;
+      margin: 0 0 0.5rem 0;
+    }
+    .page-header .subtitle {
+      font-size: 1.3em;
+      opacity: 0.8;
+      line-height: 1.4em;
+    }
+
+    /* Product section */
+    #product-section {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 2rem;
+    }
+    #product-section h2 {
+      margin-top: 0;
+      text-transform: uppercase;
+      font-size: 2em;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    /* Carousel Styles */
+    .carousel-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      margin: 0 auto 1rem auto;
+      height: 300px;
+      max-height: 60vw; /* for responsiveness on smaller screens */
+    }
+    .carousel-images {
+      display: flex;
+      transition: transform 0.5s ease;
+      width: 100%;
+      height: 100%;
+    }
+    .carousel-images img {
+      max-height: 100%;
+      /* width: 100%; */
+      flex-shrink: 0;
+      /* object-fit: cover;s */
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.7);
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      color: black;
+      font-size: 1rem;
+    }
+    #prev-btn { left: 10px; }
+    #next-btn { right: 10px; }
+
+    /* Descriptions, Price, FAQ */
+    .short-description,
+    .long-description {
+      margin-bottom: 1rem;
+      line-height: 1.4em;
+    }
+    .price {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+    }
+    .faq-section h3 {
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .faq-item {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STARFIELD BACKGROUND CONTAINER -->
+  <div id="starfield-container"></div>
+
+  <!-- MAIN CONTENT WRAPPER -->
+  <div class="content-wrapper">
+
+    <!-- Header / Tagline -->
+    <div class="page-header">
+      <h1>Most stars that we discover are never actually seen.</h1>
+      <div class="subtitle">
+        First Light lets you change that.
+      </div>
+    </div>
+
+    <!-- PRODUCT SECTION -->
+    <div id="product-section">
+      <h2>First Light</h2>
+
+      <!-- Carousel -->
+      <div class="carousel-container">
+        <div class="carousel-images" id="carouselImages">
+          <!-- Replace these with your own images -->
+          <img src="assets/hand_and_star_2.png" alt="Product Image 1" />
+          <img src="assets/frame_image.png" alt="Product Image 2" />
+          <img src="assets/star_image.png" alt="Product Image 3" />
+        </div>
+        <button class="carousel-btn" id="prev-btn">&#10094;</button>
+        <button class="carousel-btn" id="next-btn">&#10095;</button>
+      </div>
+
+      <!-- Short Description -->
+      <div class="short-description">
+        A peek into the universe like never before: your personal window to the star you name.
+      </div>
+
+      <!-- Long Description -->
+      <div class="long-description">
+        <p>
+          <strong>First Light</strong> is more than just a gift—it's an experience. 
+          We let you pick a real, newly discovered star and then give you an actual visual representation of it. 
+          Our advanced telescopic imagery and star cataloging system ensure that the star you name is truly unique.
+        </p>
+        <p>
+          Inside the package, you'll find historical facts, cosmic data, and a beautifully rendered image 
+          captured by our partnership with leading observatories. Every star tells a story—this time, it's yours.
+        </p>
+      </div>
+
+      <!-- Pricing -->
+      <div class="price">
+        $49.99
+      </div>
+
+      <!-- Shopify Buy Button Placeholder -->
+      <div id="shopify-buy-button">
+        <!-- PLACE YOUR SHOPIFY BUY BUTTON CODE HERE -->
+      </div>
+
+      <!-- FAQ -->
+      <div class="faq-section">
+        <h3>Frequently Asked Questions</h3>
+
+        <div class="faq-item">
+          <strong>How do I know my star is truly unique?</strong>
+          <p>
+            We work with recognized celestial databases to ensure that 
+            when you adopt a star, it’s newly discovered and exclusively yours to name.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <strong>Do I need special equipment to see it?</strong>
+          <p>
+            No. We provide a high-resolution image. However, you can use 
+            any telescope and our coordinate guide to locate it in the sky if you like.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <strong>Is this officially recognized by scientists?</strong>
+          <p>
+            We partner with observatories and keep star coordinates in 
+            a publicly accessible database, but naming rights here are a commemorative gesture, 
+            not an official IAU designation.
+          </p>
+        </div>
+      </div>
+    </div> <!-- /#product-section -->
+  </div> <!-- /.content-wrapper -->
+
+  <!-- THREE.JS STARFIELD SCRIPT -->
+  <script>
+    let scene, camera, renderer, starField, centralStar, redSquare;
+    const starCount = 600;
+    let textureLoader = new THREE.TextureLoader();
+    let angle = 450;
+    let twinkleFactor = 0;
+
+    function init() {
+      // Create Scene and Camera
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+      camera.position.set(300, 0, 0);
+
+      // Renderer
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.getElementById('starfield-container').appendChild(renderer.domElement);
+
+      // Star Texture
+      const starTexture = textureLoader.load(
+        "https://raw.githubusercontent.com/james2doyle/threejs-stars/refs/heads/master/images/particle2.png"
+      );
+
+      // Starfield Geometry and Material
+      let geometry = new THREE.BufferGeometry();
+      let positions = new Float32Array(starCount * 3);
+      let colors = new Float32Array(starCount * 3);
+
+      for (let i = 0; i < starCount; i++) {
+        let x = (Math.random() - 0.5) * 1000;
+        let y = (Math.random() - 0.5) * 1000;
+        let z = (Math.random() - 0.5) * 1000;
+        positions[i * 3] = x;
+        positions[i * 3 + 1] = y;
+        positions[i * 3 + 2] = z;
+
+        let colorType = Math.random();
+        if (colorType < 0.05) {
+          // bluish star
+          colors[i * 3]     = 0.3 + Math.random() * 0.2;
+          colors[i * 3 + 1] = 0.3 + Math.random() * 0.2;
+          colors[i * 3 + 2] = 0.8 + Math.random() * 0.2;
+        } else if (colorType < 0.8) {
+          // white star
+          colors[i * 3]     = 1.0 - Math.random() / 5;
+          colors[i * 3 + 1] = 1.0 - Math.random() / 5;
+          colors[i * 3 + 2] = 1.0 - Math.random() / 5;
+        } else {
+          // red/orange star
+          colors[i * 3]     = 0.9 + Math.random() * 0.1;
+          colors[i * 3 + 1] = 0.6 + Math.random() * 0.2;
+          colors[i * 3 + 2] = 0.4 + Math.random() * 0.2;
+        }
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      let material = new THREE.PointsMaterial({
+        size: 8,
+        vertexColors: true,
+        map: starTexture,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        transparent: true
+      });
+
+      // Add Starfield
+      starField = new THREE.Points(geometry, material);
+      scene.add(starField);
+
+      // Central Star Sprite
+      let centralStarMaterial = new THREE.SpriteMaterial({ 
+        map: starTexture, 
+        color: 0xffffff,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        alphaTest: 0.1  
+      });
+      centralStar = new THREE.Sprite(centralStarMaterial);
+      centralStar.scale.set(20, 20, 1);
+      scene.add(centralStar);
+
+      // Red Square around the central star
+      let squareSize = (window.innerHeight * 0.05) / 2;
+      let squareGeometry = new THREE.BufferGeometry();
+      let squareVertices = new Float32Array([
+        -squareSize,  squareSize, 0,
+         squareSize,  squareSize, 0,
+         squareSize, -squareSize, 0,
+        -squareSize, -squareSize, 0,
+        -squareSize,  squareSize, 0
+      ]);
+      squareGeometry.setAttribute('position', new THREE.BufferAttribute(squareVertices, 3));
+      let squareMaterial = new THREE.LineBasicMaterial({
+        color: 0xff0000, 
+        transparent: true, 
+        opacity: 0.8
+      });
+      redSquare = new THREE.Line(squareGeometry, squareMaterial);
+      scene.add(redSquare);
+
+      animate();
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      angle += 0.001;
+      let radius = 300;
+      camera.position.x = radius * Math.cos(angle);
+      camera.position.z = radius * Math.sin(angle);
+      camera.lookAt(0, 0, 0);
+
+      // Twinkle factor
+      twinkleFactor = 1 + Math.sin(Date.now() * 0.005) * 0.1;
+      centralStar.scale.set(20 * twinkleFactor, 20 * twinkleFactor, 1);
+      centralStar.material.opacity = twinkleFactor;
+
+      redSquare.position.set(0, 0, 0);
+
+      renderer.render(scene, camera);
+    }
+
+    // Handle window resizing
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+
+      let squareSize = (window.innerHeight * 0.05) / 2;
+      let squareVertices = new Float32Array([
+        -squareSize,  squareSize, 0,
+         squareSize,  squareSize, 0,
+         squareSize, -squareSize, 0,
+        -squareSize, -squareSize, 0,
+        -squareSize,  squareSize, 0
+      ]);
+      redSquare.geometry.setAttribute('position', new THREE.BufferAttribute(squareVertices, 3));
+    });
+
+    init();
+  </script>
+
+  <!-- SIMPLE CAROUSEL SCRIPT -->
+  <script>
+    const carouselImages = document.getElementById('carouselImages');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    let currentSlide = 0;
+
+    const slides = carouselImages.querySelectorAll('img');
+    function updateCarousel() {
+      carouselImages.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+    function showNextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      updateCarousel();
+    }
+    function showPrevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      updateCarousel();
+    }
+
+    nextBtn.addEventListener('click', showNextSlide);
+    prevBtn.addEventListener('click', showPrevSlide);
+  </script>
+
+</body>
+</html>

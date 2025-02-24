@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unseen Stars | First Light</title>
+    <meta name="description" content="Discover and own celestial bodies never before witnessed by human eyes. Each star is unique, verified, and exclusively available through First Light.">
+    <meta name="author" content="First Light">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Unseen Stars | First Light">
+    <meta property="og:description" content="Own a piece of the undiscovered universe. Each star is unique, verified, and exclusively available through First Light.">
+    <meta property="og:image" content="./assets/star_image.png">
+    <meta property="og:url" content="https://firstlight.space">
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Unseen Stars | First Light">
+    <meta name="twitter:description" content="Own a piece of the undiscovered universe. Each star is unique, verified, and exclusively available through First Light.">
+    <meta name="twitter:image" content="./assets/star_image.png">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #E0E0E0;
+            background: #000000;
+            letter-spacing: 0.02em;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .product-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .product-images {
+            flex: 1.2;
+            min-width: 400px;
+        }
+
+        .product-details {
+            flex: 0.8;
+            min-width: 300px;
+        }
+
+        .swiper {
+            width: 100%;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .swiper-slide {
+            padding: 1rem;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 2px;
+            filter: brightness(1.1) contrast(1.1);
+        }
+
+        .product-info {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 2px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            margin: 0 0 1.5rem 0;
+            font-size: 2.5rem;
+            font-weight: 500;
+            line-height: 1.2;
+            color: #FFFFFF;
+        }
+
+        .description {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #B0B0B0;
+            margin-bottom: 2.5rem;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: #FFFFFF;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            opacity: 1;
+        }
+
+        .swiper-pagination-bullet {
+            background: #FFFFFF;
+            opacity: 0.7;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .product-container {
+                padding: 2rem;
+                gap: 2rem;
+            }
+
+            .product-images {
+                min-width: 100%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div class="product-container">
+        <div class="product-images">
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="./assets/star_image.png" alt="Undiscovered Star">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="./assets/hand_image.png" alt="Star Certificate">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://via.placeholder.com/800x600" alt="Star Location Map">
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+
+        <div class="product-details">
+            <div class="product-info">
+                <h1>Own an Undiscovered Star</h1>
+                <p class="description">Be among the first humans to possess a star that has never been seen before. Each celestial body in our collection is unique, verified through our advanced astronomical detection system, and comes with a certificate of authenticity and precise astronomical coordinates.</p>
+                <div id='product-component-1740332506675'></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Swiper with improved animation
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            speed: 800,
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            }
+        });
+
+        // Enhanced P5.js Animation
+        let stars = [];
+
+        function setup() {
+            let canvas = createCanvas(windowWidth, windowHeight);
+            canvas.parent('canvas-container');
+            for (let i = 0; i < 40; i++) {
+                let x = random(width);
+                let y = random(height);
+                let w = random(20, 60) / 2;
+                let h = w * 2;
+                let flickerPeriod = random([180, 240, 300]);
+                stars.push(new Star(x, y, w, h, flickerPeriod));
+            }
+        }
+
+        function draw() {
+            clear();
+            for (let s of stars) {
+                s.display();
+            }
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+
+        function Star(x, y, w, h, flickerPeriod) {
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            this.flickerPeriod = flickerPeriod;
+            this.done = false;
+
+            this.display = function() {
+                push();
+                translate(this.x, this.y);
+                let phase = (frameCount % this.flickerPeriod) / this.flickerPeriod;
+                if (phase == 0) {
+                    this.x = random(width);
+                    this.y = random(height);
+                }
+                let scaleFactor = 1.0 - 2.0 * abs(0.5 - phase);
+                
+                fill(255, 255, 255, 100 * scaleFactor);
+                noStroke();
+                
+                beginShape();
+                let detail = 200;
+                for (let i = 0; i < detail; i++) {
+                    let t = map(i, 0, detail, 0, TWO_PI);
+                    let sx = (this.w / 2) * Math.sign(cos(t)) * pow(abs(cos(t)), 4);
+                    let sy = (this.h / 2) * Math.sign(sin(t)) * pow(abs(sin(t)), 4);
+                    vertex(sx * scaleFactor, sy * scaleFactor);
+                }
+                endShape(CLOSE);
+                pop();
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+    /*<![CDATA[*/
+    (function () {
+      var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+      if (window.ShopifyBuy) {
+        if (window.ShopifyBuy.UI) {
+          ShopifyBuyInit();
+        } else {
+          loadScript();
+        }
+      } else {
+        loadScript();
+      }
+      function loadScript() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = scriptURL;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+        script.onload = ShopifyBuyInit;
+      }
+      function ShopifyBuyInit() {
+        var client = ShopifyBuy.buildClient({
+          domain: '5imcje-sc.myshopify.com',
+          storefrontAccessToken: '77e02658461cb1e3fa86413604b7ddf3',
+        });
+        ShopifyBuy.UI.onReady(client).then(function (ui) {
+          ui.createComponent('product', {
+            id: '7485513990249',
+            node: document.getElementById('product-component-1740332506675'),
+            moneyFormat: '%24%7B%7Bamount%7D%7D',
+            options: {
+              "product": {
+                "styles": {
+                  "product": {
+                    "@media (min-width: 601px)": {
+                      "max-width": "100%",
+                      "margin-left": "0",
+                      "margin-bottom": "50px"
+                    }
+                  },
+                  "button": {
+                    "font-family": "Space Grotesk, sans-serif",
+                    "font-weight": "500",
+                    "font-size": "16px",
+                    "padding-top": "16px",
+                    "padding-bottom": "16px",
+                    "color": "#000000",
+                    ":hover": {
+                      "color": "#000000",
+                      "background-color": "#E0E0E0"
+                    },
+                    "background-color": "#FFFFFF",
+                    ":focus": {
+                      "background-color": "#E0E0E0"
+                    },
+                    "border-radius": "2px",
+                    "letter-spacing": "0.05em"
+                  },
+                  "quantityInput": {
+                    "font-size": "16px",
+                    "padding-top": "16px",
+                    "padding-bottom": "16px",
+                    "background": "rgba(255, 255, 255, 0.05)",
+                    "border-radius": "2px"
+                  }
+                },
+                "contents": {
+                  "img": false,
+                  "title": false,
+                  "price": true,
+                  "options": true,
+                  "quantity": true,
+                  "button": true
+                },
+                "text": {
+                  "button": "CLAIM THIS STAR"
+                },
+                "googleFonts": [
+                  "Space Grotesk"
+                ]
+              },
+              "productSet": {
+                "styles": {
+                  "products": {
+                    "@media (min-width: 601px)": {
+                      "margin-left": "-20px"
+                    }
+                  }
+                }
+              },
+              "modalProduct": {
+                "contents": {
+                  "img": false,
+                  "imgWithCarousel": true,
+                  "button": false,
+                  "buttonWithQuantity": true
+                },
+                "styles": {
+                  "product": {
+                    "@media (min-width: 601px)": {
+                      "max-width": "100%",
+                      "margin-left": "0px",
+                      "margin-bottom": "0px"
+                    }
+                  }
+                }
+              },
+              "cart": {
+                "styles": {
+                  "button": {
+                    "font-family": "Space Grotesk, sans-serif",
+                    "font-size": "16px",
+                    "padding-top": "16px",
+                    "padding-bottom": "16px",
+                    "color": "#000000",
+                    ":hover": {
+                      "color": "#000000",
+                      "background-color": "#E0E0E0"
+                    },
+                    "background-color": "#FFFFFF",
+                    ":focus": {
+                      "background-color": "#E0E0E0"
+                    },
+                    "border-radius": "2px",
+                    "letter-spacing": "0.05em"
+                  }
+                }
+              }
+            },
+          });
+        });
+      }
+    })();
+    /*]]>*/
+    </script>
+</body>
+</html>
