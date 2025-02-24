@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Light Star Certificate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            text-align: center;
+            font-family: 'Libre Caslon Display', serif;
+            color: white;
+        }
+
+        .product-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 30px;
+            display: flex;
+        }
+
+        .product-images {
+            flex: 1;
+            max-width: 600px;
+            overflow-y: auto;
+        }
+
+        .product-image {
+            width: 100%;
+            margin-bottom: 20px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            flex: 1;
+            padding-left: 40px;
+            text-align: left;
+        }
+
+        .product-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .product-price {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
+
+        /* Shopify button overrides */
+        .shopify-buy__product {
+            margin: 0 !important;
+            max-width: none !important;
+        }
+
+        .shopify-buy__btn {
+            padding: 15px 30px !important;
+            font-size: 1.2em !important;
+            background: white !important;
+            color: black !important;
+            border: none !important;
+            cursor: pointer !important;
+            margin-bottom: 30px !important;
+            font-family: 'Libre Caslon Display', serif !important;
+            transition: 0.3s !important;
+            border-radius: 0 !important;
+        }
+
+        .shopify-buy__btn:hover {
+            background: gray !important;
+            color: white !important;
+        }
+
+        .shopify-buy__product-img-wrapper {
+            display: none !important;
+        }
+
+        .product-description {
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .shipping-info {
+            padding: 20px;
+            border: 1px solid white;
+            margin-bottom: 30px;
+        }
+
+        /* Mobile Carousel */
+        .mobile-carousel {
+            display: none;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel-container {
+            display: flex;
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-slide {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+        }
+
+        @media screen and (max-width: 768px) {
+            .product-container {
+                flex-direction: column;
+                padding: 0;
+            }
+
+            .product-images {
+                display: none;
+            }
+
+            .mobile-carousel {
+                display: block;
+            }
+
+            .product-info {
+                padding: 20px;
+            }
+
+            .product-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="product-container">
+        <div class="mobile-carousel">
+            <div class="carousel-container">
+                <div class="carousel-slide">
+                    <img src="./assets/hand_and_star_2.png" alt="Hand, Envelope, and Star" class="product-image">
+                </div>
+                <div class="carousel-slide">
+                    <img src="./assets/two_page_image.png" alt="The two pages in each envelope" class="product-image">
+                </div>
+                <div class="carousel-slide">
+                    <img src="./assets/frame_image.png" alt="A framed First Light" class="product-image">
+                </div>
+            </div>
+        </div>
+        
+        <div class="product-images">
+            <img src="./assets/frame_image.png" alt="A framed First Light" class="product-image">
+            <img src="./assets/hand_and_star_2.png" alt="Hand, Envelope, and Star" class="product-image">
+            <img src="./assets/two_page_image.png" alt="The two pages in each envelope" class="product-image">
+        </div>
+        
+        <div class="product-info">
+            <h1 class="product-title">First Light Star Certificate</h1>
+            <div class="product-price">$30 + $5 Shipping</div>
+            <div id='product-component-1740366896033'></div>
+            <script type="text/javascript">
+            /*<![CDATA[*/
+            (function () {
+              var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+              if (window.ShopifyBuy) {
+                if (window.ShopifyBuy.UI) {
+                  ShopifyBuyInit();
+                } else {
+                  loadScript();
+                }
+              } else {
+                loadScript();
+              }
+              function loadScript() {
+                var script = document.createElement('script');
+                script.async = true;
+                script.src = scriptURL;
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+                script.onload = ShopifyBuyInit;
+              }
+              function ShopifyBuyInit() {
+                var client = ShopifyBuy.buildClient({
+                  domain: '5imcje-sc.myshopify.com',
+                  storefrontAccessToken: '77e02658461cb1e3fa86413604b7ddf3',
+                });
+                ShopifyBuy.UI.onReady(client).then(function (ui) {
+                  ui.createComponent('product', {
+                    id: '7485513990249',
+                    node: document.getElementById('product-component-1740366896033'),
+                    moneyFormat: '%24%7B%7Bamount%7D%7D',
+                    options: {
+                      "product": {
+                        "styles": {
+                          "product": {
+                            "img": {
+                              "display": "none"
+                            },
+                            "@media (min-width: 601px)": {
+                              "max-width": "100%",
+                              "margin-left": "0",
+                              "margin-bottom": "20px"
+                            }
+                          },
+                          "title": {
+                            "display": "none"
+                          },
+                          "price": {
+                            "display": "none"
+                          },
+                          "description": {
+                            "display": "none"
+                          },
+                          "button": {
+                            "display": "block !important", 
+                            "font-family": "'Libre Caslon Display', serif",
+                            "font-size": "1.2em",
+                            "padding": "15px 30px",
+                            "color": "#000000",
+                            ":hover": {
+                              "color": "#ffffff",
+                              "background-color": "#808080"
+                            },
+                            "background-color": "#ffffff",
+                            ":focus": {
+                              "background-color": "#808080"
+                            },
+                            "border-radius": "0"
+                          }
+                        }
+                      }
+                    }
+                  });
+                });
+              }
+            })();
+            /*]]>*/
+            </script>
+            
+            <div class="product-description">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+            </div>
+            
+            <div class="shipping-info">
+                <h3>Shipping Information</h3>
+                <p>Free shipping worldwide. Delivery in 3-5 business days.</p>
+            </div>
+            
+            <div class="additional-info">
+                <h3>What's Included</h3>
+                <ul>
+                    <li>Digital certificate of ownership</li>
+                    <li>High-resolution star photographs</li>
+                    <li>Interactive star viewing experience</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile carousel functionality
+        let currentSlide = 0;
+        const carousel = document.querySelector('.carousel-container');
+        const slides = document.querySelectorAll('.carousel-slide');
+        
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateCarousel();
+        }, 3000);
+    </script>
+</body>
+</html>
