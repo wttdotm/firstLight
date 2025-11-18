@@ -417,7 +417,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
-            let starTexture = textureLoader.load("https://raw.githubusercontent.com/james2doyle/threejs-stars/refs/heads/master/images/particle2.png");
+            let starTexture = textureLoader.load("./assets/particle2.png");
             let geometry = new THREE.BufferGeometry();
             let positions = new Float32Array(starCount * 3);
             let colors = new Float32Array(starCount * 3);
